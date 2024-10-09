@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'action_button_view_model.dart';
+
+class ActionButton extends StatelessWidget {
+  final ActionButtonViewModel viewModel;
+
+  const ActionButton._(this.viewModel, {Key? key}) : super(key: key);
+
+  static Widget instantiate({required ActionButtonViewModel viewModel}) {
+    return ActionButton._(viewModel);
+  }
+
+  double _getButtonSize(ActionButtonSize size) {
+    switch (size) {
+      case ActionButtonSize.large:
+        return 32.0;
+      case ActionButtonSize.medium:
+        return 24.0;
+      case ActionButtonSize.small:
+      default:
+        return 16.0;
+    }
+  }
+
+  Color _getButtonColor(ActionButtonStyle style) {
+    switch (style) {
+      case ActionButtonStyle.primary:
+        return const Color(0xFFF8D247); // Yellow
+      case ActionButtonStyle.secondary:
+        return const Color(0xFF274FF5); // Blue
+      case ActionButtonStyle.tertiary:
+        return const Color(0xFFF87147); // Orange
+      default:
+        return Colors.grey; // Default fallback color
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double buttonSize = _getButtonSize(viewModel.size);
+    final Color buttonColor = _getButtonColor(viewModel.style);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: buttonColor,
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (viewModel.image != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SizedBox(
+                width: buttonSize / 2,
+                height: buttonSize / 2,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: viewModel.image,
+                ),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0), // Adjust padding for better spacing
+            child: Text(
+              viewModel.text,
+              style: TextStyle(fontSize: buttonSize, color: Colors.white), // Optional: Change text color for better contrast
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
